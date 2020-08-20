@@ -30,46 +30,47 @@ describe("Login form", function () {
 
   before(async function () {
     driver = await new Builder().withCapabilities(capabilities).build();
-    page = new LoginPage(driver);
-    calendarPage = new CalendarPage(driver);
-    browser = new SeleniumUtils(driver);
+    await driver.get('http://lab2.webtm.ru/');
+    await driver.sleep(1000);
+    driver.findElement(By.css('#input_6')).sendKeys('w@w.w');
+    driver.findElement(By.css('#input_7')).sendKeys('w');
+    (await driver.findElement(By.css('[type="button"]'))).click()
+    await driver.sleep(3000);
   });
 
   it("simple Selenium test", async function () {
-    await driver.get('http://dev2.lab-27.ru');
-    await driver.sleep(3000);
-    driver.findElement(By.css('[ng-model="ctrl.email"]')).sendKeys('w@w.w');
-    driver.findElement(By.css('[ng-model="ctrl.password"]')).sendKeys('w');
-    (await driver.findElement(By.css('[type="button"]'))).click()
-    await driver.sleep(3000);
-    let blockOnLoginPage = driver.findElement(By.css('login-access-component'));
-    let isExist = blockOnLoginPage.then(()=> true, ()=> false);
-    (await driver.findElement(By.css('[ng-click="exit()"]'))).click()
+    (await driver.findElement(By.css('md-tab-item:nth-child(2)'))).click();
+    await driver.sleep(500);
+    //(await driver.findElement(By.css('[ng-model="ctrl.unit.hour"]'))).click()    
+    //(await driver.findElement(By.css('[ng-model="ctrl.unit.minute"]'))).click()
+    //await driver.sleep(3000);
+    let SaveButton = driver.findElement(By.css('[ng-click="ctrl.save()"]'));
+    let isExist = SaveButton.then(()=> true, ()=> false);
     await assert.equal(await isExist, false);
   });
 
-  it("Positive test", async function () {
-    browser.go(App.url);
-    await page.isLoad();
-    await browser.keys(page.email(), App.user.login);
-    await browser.keys(page.password(), App.user.password);
-    await browser.click(page.submit());
-    await calendarPage.isLoad();
-    let isCalendarPage = await calendarPage.isPage();
-    await browser.click(calendarPage.buttonExit());
-    await assert.equal(isCalendarPage, true);
-  });
+  // it("Positive test", async function () {
+  //   browser.go(App.url);
+  //   await page.isLoad();
+  //   await browser.keys(page.email(), App.user.login);
+  //   await browser.keys(page.password(), App.user.password);
+  //   await browser.click(page.submit());
+  //   await calendarPage.isLoad();
+  //   let isCalendarPage = await calendarPage.isPage();
+  //   await browser.click(calendarPage.buttonExit());
+  //   await assert.equal(isCalendarPage, true);
+  // });
 
-  it("Negative test", async function () {
-    browser.go(App.url);
-    await page.isLoad();
-    await browser.sleep(2000);
-    await browser.keys(page.email(), App.user.login);
-    await browser.keys(page.password(), "qweqweqweqwe");
-    await browser.click(page.submit());
-    await page.isLoad();
-    await assert.equal(await page.isPage(), true);
-  });
+  // it("Negative test", async function () {
+  //   browser.go(App.url);
+  //   await page.isLoad();
+  //   await browser.sleep(2000);
+  //   await browser.keys(page.email(), App.user.login);
+  //   await browser.keys(page.password(), "qweqweqweqwe");
+  //   await browser.click(page.submit());
+  //   await page.isLoad();
+  //   await assert.equal(await page.isPage(), true);
+  // });
 
   after(() => driver && driver.quit());
 });
