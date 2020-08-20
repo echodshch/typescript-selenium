@@ -38,16 +38,18 @@ describe("Login form", function () {
     await driver.sleep(3000);
   });
 
-  it("simple Selenium test", async function () {
+  it("Add button, negative", async function () {
     (await driver.findElement(By.css('md-tab-item:nth-child(2)'))).click();
     await driver.sleep(500);
-    //(await driver.findElement(By.css('[ng-model="ctrl.unit.hour"]'))).click()    
-    //(await driver.findElement(By.css('[ng-model="ctrl.unit.minute"]'))).click()
-    //await driver.sleep(3000);
     let SaveButton = driver.findElement(By.css('[ng-click="ctrl.save()"]'));
     let isExist = SaveButton.then(()=> true, ()=> false);
     await assert.equal(await isExist, false);
   });
+
+function isExist(selector: string){
+    let SaveButton = driver.findElement(By.css(selector));
+    return SaveButton.then(()=> true, ()=> false);
+  }
 
   // it("Positive test", async function () {
   //   browser.go(App.url);
